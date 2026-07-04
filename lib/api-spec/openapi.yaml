@@ -1,22 +1,30 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: CivicPulse AI API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication operations
+  - name: complaints
+    description: Complaint management
+  - name: departments
+    description: Department management
+  - name: analytics
+    description: Analytics and insights
+  - name: ai
+    description: AI analysis operations
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +32,311 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/signup:
+    post:
+      operationId: signup
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupInput"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /complaints:
+    get:
+      operationId: listComplaints
+      tags: [complaints]
+      summary: List all complaints
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: priority
+          in: query
+          schema:
+            type: string
+        - name: department
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of complaints
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComplaintListResponse"
+    post:
+      operationId: createComplaint
+      tags: [complaints]
+      summary: Submit a new complaint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ComplaintInput"
+      responses:
+        "201":
+          description: Complaint created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Complaint"
+
+  /complaints/{id}:
+    get:
+      operationId: getComplaint
+      tags: [complaints]
+      summary: Get a complaint by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Complaint details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Complaint"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateComplaint
+      tags: [complaints]
+      summary: Update a complaint
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ComplaintUpdate"
+      responses:
+        "200":
+          description: Updated complaint
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Complaint"
+    delete:
+      operationId: deleteComplaint
+      tags: [complaints]
+      summary: Delete a complaint
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /complaints/{id}/analyze:
+    post:
+      operationId: analyzeComplaint
+      tags: [ai]
+      summary: Run AI analysis on a complaint
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: AI analysis result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AIAnalysis"
+
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [analytics]
+      summary: Get dashboard summary stats
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /analytics:
+    get:
+      operationId: getAnalytics
+      tags: [analytics]
+      summary: Get analytics data
+      responses:
+        "200":
+          description: Analytics data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyticsData"
+
+  /analytics/insights:
+    get:
+      operationId: getInsights
+      tags: [analytics]
+      summary: Get AI-generated insights
+      responses:
+        "200":
+          description: AI insights
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Insight"
+
+  /departments:
+    get:
+      operationId: listDepartments
+      tags: [departments]
+      summary: List all departments
+      responses:
+        "200":
+          description: List of departments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Department"
+
+  /departments/{id}:
+    get:
+      operationId: getDepartment
+      tags: [departments]
+      summary: Get department details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Department details with stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DepartmentWithStats"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /ai/analyze:
+    post:
+      operationId: analyzeText
+      tags: [ai]
+      summary: Analyze text with Gemini AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalyzeInput"
+      responses:
+        "200":
+          description: Analysis result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AIAnalysis"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +347,480 @@ components:
       required:
         - status
 
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        organization:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - email
+        - role
+        - createdAt
+
+    SignupInput:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        organization:
+          type: string
+        role:
+          type: string
+      required:
+        - name
+        - email
+        - password
+        - role
+
+    LoginInput:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+      required:
+        - token
+        - user
+
+    Complaint:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        landmark:
+          type: ["string", "null"]
+        ward:
+          type: ["string", "null"]
+        status:
+          type: string
+        priority:
+          type: ["string", "null"]
+        category:
+          type: ["string", "null"]
+        department:
+          type: ["string", "null"]
+        severity:
+          type: ["string", "null"]
+        impactScore:
+          type: ["number", "null"]
+        duplicateCount:
+          type: integer
+        incidentGroupId:
+          type: ["integer", "null"]
+        imageUrl:
+          type: ["string", "null"]
+        submittedBy:
+          type: ["integer", "null"]
+        submitterName:
+          type: ["string", "null"]
+        aiAnalysis:
+          type: ["object", "null"]
+          additionalProperties: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - description
+        - location
+        - status
+        - duplicateCount
+        - createdAt
+        - updatedAt
+
+    ComplaintInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        landmark:
+          type: string
+        ward:
+          type: string
+        imageUrl:
+          type: string
+      required:
+        - title
+        - description
+        - location
+
+    ComplaintUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+        priority:
+          type: string
+        department:
+          type: string
+        ward:
+          type: string
+
+    ComplaintListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Complaint"
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
+      required:
+        - data
+        - total
+        - page
+        - limit
+
+    AIAnalysis:
+      type: object
+      properties:
+        category:
+          type: string
+        severity:
+          type: string
+        priority:
+          type: string
+        department:
+          type: string
+        impactScore:
+          type: number
+        duplicateProbability:
+          type: number
+        recommendedCrew:
+          type: integer
+        equipmentRequired:
+          type: array
+          items:
+            type: string
+        estimatedResponseTime:
+          type: string
+        recommendation:
+          type: string
+        similarComplaints:
+          type: array
+          items:
+            type: integer
+      required:
+        - category
+        - severity
+        - priority
+        - department
+        - impactScore
+        - duplicateProbability
+        - recommendedCrew
+        - equipmentRequired
+        - estimatedResponseTime
+        - recommendation
+        - similarComplaints
+
+    DashboardStats:
+      type: object
+      properties:
+        totalComplaints:
+          type: integer
+        criticalIssues:
+          type: integer
+        resolvedIssues:
+          type: integer
+        pendingIssues:
+          type: integer
+        avgResponseTime:
+          type: string
+        todayComplaints:
+          type: integer
+        weeklyTrend:
+          type: number
+        departmentWorkload:
+          type: array
+          items:
+            $ref: "#/components/schemas/DepartmentWorkload"
+        recentComplaints:
+          type: array
+          items:
+            $ref: "#/components/schemas/Complaint"
+        priorityBreakdown:
+          $ref: "#/components/schemas/PriorityBreakdown"
+      required:
+        - totalComplaints
+        - criticalIssues
+        - resolvedIssues
+        - pendingIssues
+        - avgResponseTime
+        - todayComplaints
+        - weeklyTrend
+        - departmentWorkload
+        - recentComplaints
+        - priorityBreakdown
+
+    PriorityBreakdown:
+      type: object
+      properties:
+        critical:
+          type: integer
+        high:
+          type: integer
+        medium:
+          type: integer
+        low:
+          type: integer
+      required:
+        - critical
+        - high
+        - medium
+        - low
+
+    DepartmentWorkload:
+      type: object
+      properties:
+        department:
+          type: string
+        pending:
+          type: integer
+        resolved:
+          type: integer
+        total:
+          type: integer
+      required:
+        - department
+        - pending
+        - resolved
+        - total
+
+    AnalyticsData:
+      type: object
+      properties:
+        categoryBreakdown:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChartDataPoint"
+        dailyTrend:
+          type: array
+          items:
+            $ref: "#/components/schemas/DailyTrendPoint"
+        priorityDistribution:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChartDataPoint"
+        wardBreakdown:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChartDataPoint"
+        departmentPerformance:
+          type: array
+          items:
+            $ref: "#/components/schemas/DepartmentPerformance"
+      required:
+        - categoryBreakdown
+        - dailyTrend
+        - priorityDistribution
+        - wardBreakdown
+        - departmentPerformance
+
+    ChartDataPoint:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: integer
+        color:
+          type: string
+      required:
+        - name
+        - value
+
+    DailyTrendPoint:
+      type: object
+      properties:
+        date:
+          type: string
+        count:
+          type: integer
+        resolved:
+          type: integer
+      required:
+        - date
+        - count
+        - resolved
+
+    DepartmentPerformance:
+      type: object
+      properties:
+        department:
+          type: string
+        avgResolutionTime:
+          type: number
+        resolvedCount:
+          type: integer
+        pendingCount:
+          type: integer
+        performanceScore:
+          type: number
+      required:
+        - department
+        - avgResolutionTime
+        - resolvedCount
+        - pendingCount
+        - performanceScore
+
+    Insight:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        severity:
+          type: string
+        metric:
+          type: ["string", "null"]
+        trend:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - type
+        - title
+        - description
+        - severity
+        - createdAt
+
+    Department:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        code:
+          type: string
+        description:
+          type: ["string", "null"]
+        headCount:
+          type: integer
+        pendingCount:
+          type: integer
+        resolvedCount:
+          type: integer
+        avgPriority:
+          type: ["string", "null"]
+      required:
+        - id
+        - name
+        - code
+        - headCount
+        - pendingCount
+        - resolvedCount
+
+    DepartmentWithStats:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        code:
+          type: string
+        description:
+          type: ["string", "null"]
+        headCount:
+          type: integer
+        pendingCount:
+          type: integer
+        resolvedCount:
+          type: integer
+        avgPriority:
+          type: ["string", "null"]
+        recentComplaints:
+          type: array
+          items:
+            $ref: "#/components/schemas/Complaint"
+        performanceScore:
+          type: number
+        weeklyResolved:
+          type: integer
+      required:
+        - id
+        - name
+        - code
+        - headCount
+        - pendingCount
+        - resolvedCount
+        - recentComplaints
+        - performanceScore
+        - weeklyResolved
+
+    AnalyzeInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+      required:
+        - title
+        - description
+        - location
