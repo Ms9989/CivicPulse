@@ -1,0 +1,520 @@
+CivicPulse AI – Intelligent Civic Decision Support Platform
+Objective
+
+Build a production-quality, enterprise-grade, AI-powered web application named CivicPulse AI.
+
+This is NOT a basic complaint portal. It is an AI Decision Intelligence Platform that helps municipalities analyze citizen complaints, prioritize them based on impact, detect duplicate incidents, recommend departments, optimize resources, and provide actionable governance insights.
+
+The application must look like a premium SaaS product suitable for presentation at a Google Hackathon.
+
+Design Philosophy
+
+The UI should be the strongest part of the application.
+
+Design inspiration should be similar to modern enterprise platforms like:
+
+Google Cloud Console
+Microsoft Azure Portal
+Notion AI
+Linear
+Stripe Dashboard
+Vercel Dashboard
+Clerk Authentication
+Framer
+Figma
+
+The application should feel premium, futuristic, minimal, and highly polished.
+
+Avoid generic Bootstrap styling.
+
+Avoid childish colors.
+
+Avoid cartoon illustrations.
+
+Avoid casual chat-style emojis.
+
+Use only professional icons from React Icons or Lucide React where appropriate.
+
+UI Requirements
+
+The entire application must have an outstanding user experience.
+
+Include
+Fully responsive layout
+Modern dashboard
+Smooth page transitions
+Glassmorphism where appropriate
+Soft shadows
+Rounded cards
+Consistent spacing
+Excellent typography
+Micro animations
+Hover effects
+Animated statistics cards
+Animated charts
+Loading skeletons
+Toast notifications
+Professional color palette
+Beautiful gradients
+Modern sidebar
+Professional navbar
+Reusable UI components
+Dashboard widgets
+Empty states
+Error states
+Success animations
+
+The website should look like a startup product rather than a college project.
+
+Theme Support
+
+The application must include
+
+✔ Light Theme
+
+✔ Dark Theme
+
+Include a theme toggle in the navigation bar.
+
+Remember the selected theme using local storage.
+
+Every page must support both themes perfectly.
+
+Charts should automatically adapt to the selected theme.
+
+Authentication
+
+Create beautiful authentication pages.
+
+Login Page
+
+Include
+
+Modern split-screen layout
+Hero illustration or abstract AI-inspired background
+Email
+Password
+Remember Me
+Forgot Password
+Login button
+Social login placeholders (Google)
+Validation
+Smooth animations
+Signup Page
+
+Include
+
+Name
+Email
+Password
+Confirm Password
+Organization
+Role selection
+
+Roles
+
+Citizen
+Municipal Officer
+Administrator
+
+Beautiful validation
+
+Animated transitions
+
+Professional layout
+
+Landing Page
+
+Create a premium landing page.
+
+Sections
+
+Hero Section
+Features
+AI Workflow
+Why CivicPulse AI
+Statistics
+Testimonials (dummy)
+How It Works
+Footer
+Contact
+
+Hero section should immediately explain the value proposition.
+
+Use animated backgrounds and modern sections.
+
+Tech Stack
+Frontend
+
+React (Vite)
+
+Tailwind CSS
+
+React Router
+
+Axios
+
+Recharts
+
+React Icons (or Lucide React)
+
+Framer Motion
+
+Backend
+
+FastAPI
+
+Python
+
+Uvicorn
+
+Pydantic
+
+AI
+
+Google Gemini API
+
+Database
+
+Use Firebase Firestore as the primary database.
+
+Design the backend using a repository/service pattern so that the database can be replaced in the future without changing business logic.
+
+Store:
+
+Users
+Complaints
+AI Analysis
+Departments
+Analytics
+Incident Groups
+Resource Recommendations
+Features
+Landing Page
+
+Professional animated homepage.
+
+Call-to-action buttons.
+
+Statistics.
+
+Feature cards.
+
+AI workflow.
+
+Modern footer.
+
+Authentication
+
+Login
+
+Signup
+
+Role-based routing
+
+Protected routes
+
+Dashboard
+
+Display
+
+Total Complaints
+Critical Issues
+Resolved Issues
+Pending Issues
+Average Response Time
+Department Workload
+Today's AI Insights
+
+Beautiful animated cards.
+
+Complaint Submission
+
+Allow citizens to submit
+
+Title
+Description
+Location
+Landmark
+Ward
+Optional Image
+
+Upon submission
+
+Send to FastAPI backend.
+
+Backend sends complaint to Gemini.
+
+AI Analysis
+
+Gemini should return
+
+Category
+
+Severity
+
+Priority
+
+Department
+
+Impact Score
+
+Duplicate Probability
+
+Recommended Crew
+
+Equipment Required
+
+Estimated Response Time
+
+Recommendation
+
+Return JSON only.
+
+Duplicate Detection
+
+Compare complaint with existing database.
+
+Group similar complaints.
+
+Display
+
+"15 Similar Reports"
+
+instead of creating isolated complaints.
+
+Incident Grouping
+
+Merge similar complaints into one incident.
+
+Example
+
+10 pothole complaints
+
+↓
+
+One Road Incident
+
+Reported by 10 citizens.
+
+Priority Engine
+
+Priority should consider
+
+Severity
+Duplicate count
+Hospitals
+Schools
+Traffic disruption
+Water supply
+Electricity
+Population affected
+
+Priority Levels
+
+Critical
+
+High
+
+Medium
+
+Low
+
+Resource Recommendation
+
+Generate
+
+Department
+
+Crew Size
+
+Equipment
+
+Estimated Repair Time
+
+Suggested Action
+
+Complaint Management
+
+Professional data table.
+
+Card view.
+
+Filters
+
+Sorting
+
+Search
+
+Pagination
+
+Status updates
+
+Departments
+
+Road Department
+
+Water Department
+
+Electricity
+
+Sanitation
+
+Traffic
+
+Each department page should show
+
+Pending work
+
+Completed work
+
+Average priority
+
+Performance
+
+Analytics
+
+Beautiful dashboards.
+
+Charts
+
+Complaint categories
+
+Daily trends
+
+Department performance
+
+Priority distribution
+
+Area-wise complaints
+
+Critical complaints
+
+AI Insights
+
+Generate insights such as
+
+Garbage complaints increased 32%
+Water leakage recurring in Ward 5
+Road department overloaded
+Electricity failures increasing
+
+Display as premium insight cards.
+
+Optional Features
+
+Complaint hotspot map
+
+Image analysis
+
+Multilingual support
+
+PDF reports
+
+CSV export
+
+Email notification placeholder
+
+Backend APIs
+
+POST /auth/signup
+
+POST /auth/login
+
+POST /complaint
+
+GET /complaints
+
+GET /dashboard
+
+POST /analyze
+
+GET /analytics
+
+GET /departments
+
+PUT /complaint/{id}
+
+DELETE /complaint/{id}
+
+Code Quality
+
+Generate clean, modular, scalable code.
+
+Follow best practices.
+
+Separate
+
+Components
+
+Pages
+
+Hooks
+
+Contexts
+
+Services
+
+Utilities
+
+Backend should use
+
+Routers
+
+Services
+
+Models
+
+Schemas
+
+Repositories
+
+Configuration
+
+Environment Variables
+
+Error Handling
+
+Logging
+
+Validation
+
+Performance
+
+Optimize React rendering.
+
+Lazy-load pages.
+
+Use reusable components.
+
+Implement loading states.
+
+Responsive for
+
+Desktop
+
+Tablet
+
+Mobile
+
+Final Deliverables
+
+Generate a complete full-stack application with:
+
+Premium landing page
+Login & signup with role selection
+Dark/light theme toggle
+Modern dashboard
+Complaint management
+AI-powered analysis using Gemini
+Firebase Firestore integration
+Department management
+Analytics dashboard
+Responsive design
+Professional animations
+Production-ready folder structure
+README with setup instructions
+.env.example file
+Clean and maintainable code
+
+The final result should feel like a commercial civic-tech SaaS product rather than a student project, with a polished user experience, enterprise-grade UI, and a cohesive design system suitable for impressing hackathon judges.
